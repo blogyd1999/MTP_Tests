@@ -1,0 +1,20 @@
+<RunSettings>
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <DataCollector friendlyName="XPlat Code Coverage">
+        <Configuration>
+          <Format>cobertura</Format>
+
+          <!-- Include all your app projects -->
+          <Include>
+            [MtpTests.Core]*,
+            [MtpTests.Utils]*
+          </Include>
+
+          <!-- Exclude tests -->
+          <Exclude>[*.Tests]*</Exclude>
+        </Configuration>
+      </DataCollector>
+    </DataCollectors>
+  </DataCollectionRunSettings>
+</RunSettings>
