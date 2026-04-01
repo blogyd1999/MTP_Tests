@@ -1,0 +1,45 @@
+name: .NET MTP CI
+
+on:
+push:
+branches: [ main ]
+pull_request:
+
+jobs:
+build:
+runs-on: ubuntu-latest
+
+
+steps:
+- name: Checkout code
+  uses: actions/checkout@v4
+
+- name: Setup .NET
+  uses: actions/setup-dotnet@v4
+  with:
+    dotnet-version: 8.0.x
+
+- name: Restore
+  run: dotnet restore
+
+- name: Build
+  run: dotnet build --no-restore
+
+- name: Run Tests with Coverage (MTP)
+  run: dotnet test --settings coverage.runsettings --no-build
+
+- name: Install ReportGenerator
+  run: dotnet tool install -g dotnet-reportgenerator-globaltool
+
+- name: Merge Coverage Reports
+  run: |
+    reportgenerator \
+      -reports:"**/TestResults/**/coverage.cobertura.xml" \
+      -targetdir:"coverage-report" \
+      -reporttypes:"Html;Cobertura"
+
+- name: Upload Coverage Report
+  uses: actions/upload-artifact@v4
+  with:
+    name: coverage-report
+    path: coverage-report
